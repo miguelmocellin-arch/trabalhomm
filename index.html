@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz de Língua Portuguesa</title>
+  <meta name="description" content="Quiz interativo com 10 perguntas de Língua Portuguesa, com explicação comentada e ranking ao vivo.">
+
+  <!-- Fontes (com alternativas caso não carreguem) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Cabeçalho (presente em todas as telas) ===== -->
+  <header class="topo">
+    <div class="marca">
+      <h1>Língua Portuguesa</h1>
+      <p>Quiz de gramática e uso da língua com 10 questões comentadas</p>
+    </div>
+    <p class="acessos">
+      Acessos totais:
+      <strong id="contador-acessos">0</strong>
+    </p>
+  </header>
+
+  <main class="layout">
+
+    <!-- ===== Área principal: uma tela visível por vez ===== -->
+    <div class="painel">
+
+      <!-- TELA 1: início -->
+      <section id="tela-inicio" class="tela" aria-labelledby="titulo-inicio">
+        <h2 id="titulo-inicio">Teste o que você sabe de português</h2>
+        <p>
+          Responda 10 perguntas. Depois de cada resposta, você lê a explicação
+          de por que a alternativa está certa ou errada. Seu resultado entra no ranking.
+        </p>
+
+        <label for="campo-nome">Seu nome no ranking</label>
+        <input id="campo-nome" type="text" maxlength="20" autocomplete="nickname"
+               placeholder="Ex.: Maria">
+        <p id="erro-nome" class="erro-campo" role="alert" hidden>
+          Digite um nome para começar.
+        </p>
+
+        <button id="btn-iniciar" class="btn btn-principal" type="button">
+          Começar o quiz
+        </button>
+      </section>
+
+      <!-- TELA 2: pergunta atual -->
+      <section id="tela-pergunta" class="tela" aria-labelledby="enunciado" hidden>
+
+        <!-- Barra de progresso: enche a cada pergunta respondida -->
+        <div class="progresso" role="progressbar" aria-label="Progresso do quiz"
+             aria-valuemin="0" aria-valuemax="10" aria-valuenow="0" id="progresso">
+          <span class="marcador" aria-hidden="true"></span>
+          <span class="trilho" aria-hidden="true">
+            <span class="preenchimento" id="preenchimento"></span>
+          </span>
+        </div>
+        <p class="status">
+          Pergunta <strong id="num-pergunta">1</strong> de 10
+          <span class="pontos-atuais">Acertos: <strong id="pontos-atuais">0</strong></span>
+        </p>
+
+        <h2 id="enunciado" class="enunciado"></h2>
+
+        <ul id="opcoes" class="opcoes"></ul>
+
+        <!-- Explicação comentada: aparece só depois que o usuário responde -->
+        <div id="feedback" class="feedback" role="status" aria-live="polite" hidden>
+          <h3 id="feedback-titulo"></h3>
+          <p id="feedback-texto"></p>
+        </div>
+
+        <button id="btn-proxima" class="btn btn-principal" type="button" hidden>
+          Próxima pergunta
+        </button>
+      </section>
+
+      <!-- TELA 3: resultado final -->
+      <section id="tela-resultado" class="tela" aria-labelledby="titulo-resultado" hidden>
+        <h2 id="titulo-resultado">Resultado final</h2>
+        <p class="nota"><span id="nota-final">0</span><small>/10</small></p>
+        <p id="mensagem-final"></p>
+        <dl class="resumo">
+          <div><dt>Aproveitamento</dt><dd id="percentual">0%</dd></div>
+          <div><dt>Tempo total</dt><dd id="tempo-final">00:00</dd></div>
+          <div><dt>Posição no ranking</dt><dd id="posicao-final">-</dd></div>
+        </dl>
+        <button id="btn-reiniciar" class="btn btn-principal" type="button">
+          Jogar novamente
+        </button>
+      </section>
+    </div>
+
+    <!-- ===== Ranking (visível em todas as telas) ===== -->
+    <aside class="ranking" aria-labelledby="titulo-ranking">
+      <h2 id="titulo-ranking">Ranking: top 10</h2>
+      <ol id="lista-ranking" class="lista-ranking"></ol>
+      <p id="status-ranking" class="status-ranking" role="status" aria-live="polite">
+        Conectando ao ranking...
+      </p>
+      <p class="nota-ranking">
+        O ranking é atualizado automaticamente. Empates são decididos pelo menor tempo.
+      </p>
+    </aside>
+
+  </main>
+
+  <footer class="rodape">
+    Projeto escolar de Língua Portuguesa
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="questions.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

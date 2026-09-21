@@ -1,0 +1,347 @@
+/* =========================================================
+   Quiz de Língua Portuguesa
+   Estilos gerais, responsividade e feedback de acerto/erro
+   ========================================================= */
+
+/* ---------- Variáveis de cor e tipografia ---------- */
+:root {
+  --fundo: #efeaf7;         /* fundo da página (lavanda) */
+  --papel: #ffffff;         /* fundo dos cartões */
+  --tinta: #2b1b4a;         /* texto principal e botões (violeta escuro) */
+  --tinta-suave: #5d5175;   /* texto secundário */
+  --linha: #d6cce6;         /* bordas */
+  --destaque: #e8a200;      /* âmbar: progresso e nota final */
+  --acerto: #14804a;        /* verde: resposta certa */
+  --acerto-fundo: #e1f4e9;
+  --erro: #c2303f;          /* vermelho: resposta errada */
+  --erro-fundo: #fbe8ea;
+  --foco: #7c3aed;
+
+  --fonte-titulo: "Fraunces", Georgia, "Times New Roman", serif;
+  --fonte-texto: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Garante que o atributo hidden sempre esconda o elemento */
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--tinta);
+  font-family: var(--fonte-texto);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+
+h1, h2, h3 {
+  font-family: var(--fonte-titulo);
+  line-height: 1.2;
+  margin: 0 0 0.75rem;
+}
+
+p { margin: 0 0 1rem; }
+
+/* Foco visível para navegação por teclado */
+:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+/* ---------- Cabeçalho e rodapé ---------- */
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 1rem;
+}
+
+.marca h1 {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 800;
+  margin-bottom: 0.15rem;
+}
+
+.marca p,
+.acessos {
+  margin: 0;
+  color: var(--tinta-suave);
+  font-size: 0.95rem;
+}
+
+.rodape {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
+  color: var(--tinta-suave);
+  font-size: 0.9rem;
+}
+
+/* ---------- Layout principal: quiz + ranking ---------- */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; }
+}
+
+.painel,
+.ranking {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 14px;
+  padding: 1.5rem;
+}
+
+/* ---------- Formulário e botões ---------- */
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+input[type="text"] {
+  width: 100%;
+  max-width: 360px;
+  padding: 0.7rem 0.85rem;
+  border: 2px solid var(--linha);
+  border-radius: 8px;
+  font: inherit;
+  margin-bottom: 0.75rem;
+}
+
+.erro-campo {
+  color: var(--erro);
+  font-weight: 600;
+}
+
+.btn {
+  font: inherit;
+  font-weight: 600;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.8rem 1.4rem;
+  cursor: pointer;
+}
+
+.btn-principal {
+  background: var(--tinta);
+  color: #fff;
+  margin-top: 0.5rem;
+}
+
+.btn-principal:hover { background: #45306d; }
+
+/* ---------- Barra de progresso ---------- */
+.progresso {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+/* Marcador de página na ponta esquerda da barra */
+.marcador {
+  width: 16px;
+  height: 30px;
+  background: var(--destaque);
+  border: 3px solid var(--tinta);
+  border-radius: 4px 4px 0 0;
+  margin-right: -3px;
+  z-index: 1;
+}
+
+.trilho {
+  flex: 1;
+  height: 14px;
+  border: 3px solid var(--tinta);
+  border-radius: 0 8px 8px 0;
+  background: var(--fundo);
+  overflow: hidden;
+}
+
+.preenchimento {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--destaque);
+  transition: width 0.5s ease;
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  color: var(--tinta-suave);
+  font-size: 0.95rem;
+}
+
+/* ---------- Pergunta e alternativas ---------- */
+.enunciado {
+  font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+  margin-bottom: 1rem;
+}
+
+.opcoes {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.opcao {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  padding: 0.85rem 1rem;
+  background: var(--papel);
+  color: var(--tinta);
+  border: 2px solid var(--linha);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.opcao:hover:not(:disabled) { border-color: var(--tinta); }
+
+.opcao .letra {
+  flex: none;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--fundo);
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  font-size: 0.9rem;
+}
+
+.opcao:disabled { cursor: default; }
+
+/* Feedback visual: verde para certa, vermelho para errada.
+   O ícone (✓ / ✗) garante que a informação não dependa só da cor. */
+.opcao.certa   { border-color: var(--acerto); background: var(--acerto-fundo); }
+.opcao.errada  { border-color: var(--erro);   background: var(--erro-fundo); }
+.opcao.certa .letra  { background: var(--acerto); color: #fff; }
+.opcao.errada .letra { background: var(--erro);   color: #fff; }
+
+/* ---------- Explicação comentada ---------- */
+.feedback {
+  border-left: 6px solid var(--linha);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.5rem;
+  animation: aparecer 0.3s ease;
+}
+
+.feedback h3 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+.feedback p  { margin: 0; }
+
+.feedback.acertou { background: var(--acerto-fundo); border-color: var(--acerto); }
+.feedback.acertou h3 { color: var(--acerto); }
+.feedback.errou   { background: var(--erro-fundo);   border-color: var(--erro); }
+.feedback.errou h3   { color: var(--erro); }
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Resultado final ---------- */
+.nota {
+  font-family: var(--fonte-titulo);
+  font-weight: 800;
+  font-size: 4.5rem;
+  line-height: 1;
+  color: var(--destaque);
+  margin-bottom: 0.5rem;
+}
+
+.nota small { font-size: 1.6rem; color: var(--tinta-suave); }
+
+.resumo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+}
+
+.resumo div {
+  background: var(--fundo);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+
+.resumo dt { font-size: 0.85rem; color: var(--tinta-suave); }
+.resumo dd { margin: 0; font-weight: 700; font-size: 1.3rem; }
+
+/* ---------- Ranking ---------- */
+.lista-ranking {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.lista-ranking li {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem 0.4rem;
+  border-bottom: 1px solid var(--linha);
+}
+
+.lista-ranking .pos    { font-weight: 700; color: var(--tinta-suave); }
+.lista-ranking .nome   { overflow-wrap: anywhere; }
+.lista-ranking .pontos { font-weight: 700; }
+.lista-ranking .tempo  { color: var(--tinta-suave); font-size: 0.9rem; }
+
+/* Destaca a linha do jogador que acabou de jogar */
+.lista-ranking li.atual {
+  background: #fff3d1;
+  border-radius: 8px;
+  border-bottom-color: transparent;
+}
+
+/* Posições ainda sem jogador */
+.lista-ranking li.vazio .nome,
+.lista-ranking li.vazio .pontos,
+.lista-ranking li.vazio .tempo {
+  color: #9b90b0;
+  font-weight: 400;
+}
+
+/* Mensagem de estado do ranking (ao vivo / sem conexão) */
+.status-ranking {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--acerto);
+  margin-bottom: 0.25rem;
+}
+
+.status-ranking.aviso { color: var(--erro); }
+
+.nota-ranking {
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+  margin: 0;
+}
+
+/* ---------- Respeita quem prefere menos movimento ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
